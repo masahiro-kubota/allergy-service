@@ -40,7 +40,7 @@ def create_app():
     CORS(app)
     init_db("data/allergies.db")
 
-    base_url = os.getenv("NEXT_PUBLIC_BASE_URL", "http://localhost:8000")
+    base_url = os.getenv("BASE_URL", "http://localhost:8000")
 
     @app.route('/register', methods=['POST'])
     def register_allergy():
@@ -88,10 +88,10 @@ def create_app():
         with sqlite3.connect("data/allergies.db") as conn:
             cursor = conn.cursor()
             rows = cursor.fetchall()
-        for row in rows:
-            data = [
-                {"id": row[0], "name": row[1], "allergy": row[2], "severity": row[3], "treatment": row[4]}
-            ]
+        data = [
+            {"id": row[0], "name": row[1], "allergy": row[2], "severity": row[3], "treatment": row[4]}
+            for row in rows
+        ]
         return jsonify(data), 200
     
     return app
