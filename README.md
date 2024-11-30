@@ -1,12 +1,16 @@
 allergy service
 
+need to change remote address in frontend/scripts/app.js to local host
 ```
-$ xdg-open frontend/index.html
-```
-```
-$ uv sync
-$ . .venv/bin/activate
-$ gunicorn backend.app:app --log-level debug
+# frontend
+$ cd frontend
+$ python3 -m http.server 5000
 ```
 
-need to change remote address in index.html to local host
+```
+# backend
+$ uv sync
+$ . .venv/bin/activate
+$ gunicorn backend.app:app --workers 4 --log-level debug --bind 127.0.0.1:8000
+```
+

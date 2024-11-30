@@ -40,7 +40,8 @@ def create_app():
     CORS(app)
     init_db("data/allergies.db")
 
-    base_url = os.getenv("BASE_URL", "http://localhost:8000")
+    base_url = os.getenv("BASE_URL", "http://127.0.0.1:8000")
+    
 
     @app.route('/register', methods=['POST'])
     def register_allergy():
@@ -56,6 +57,7 @@ def create_app():
                 VALUES (?, ?, ?, ?, ?)
             ''', (unique_id, data.get('name'), data.get('allergy'), data.get('severity'), data.get('treatment')))
             conn.commit()
+        print(base_url)
         share_link = f"{base_url}/share/{unique_id}"
 
         return jsonify({
