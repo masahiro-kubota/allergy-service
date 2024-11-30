@@ -65,7 +65,6 @@ def create_app():
 
     @app.route('/share/<string:unique_id>', methods=['GET'])
     def get_allergy_info(unique_id):
-        print("start")
         with sqlite3.connect("data/allergies.db") as conn:
             cursor = conn.cursor()
             cursor.execute('''
@@ -89,10 +88,10 @@ def create_app():
         with sqlite3.connect("data/allergies.db") as conn:
             cursor = conn.cursor()
             rows = cursor.fetchall()
-        data = [
-            {"id": row[0], "name": row[1], "allergy": row[2], "severity": row[3], "treatment": row[4]}
-            for row in rows
-        ]
+        for row in rows:
+            data = [
+                {"id": row[0], "name": row[1], "allergy": row[2], "severity": row[3], "treatment": row[4]}
+            ]
         return jsonify(data), 200
     
     return app
