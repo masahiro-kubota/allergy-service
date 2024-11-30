@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アレルギー情報登録</title>
+</head>
+<body>
+  <h1>アレルギー情報登録</h1>
+  <form id="allergyForm">
+    <label for="name">名前（任意）:</label>
+    <input type="text" id="name" name="name" placeholder="例: 山田 太郎"><br><br>
+
+    <label for="allergy">アレルギー対象:</label>
+    <input type="text" id="allergy" name="allergy" placeholder="例: ピーナッツ"><br><br>
+
+    <label for="severity">重症度:</label>
+    <select id="severity" name="severity">
+      <option value="軽度">軽度</option>
+      <option value="中程度">中程度</option>
+      <option value="重度">重度</option>
+    </select><br><br>
+
+    <label for="treatment">対処法:</label>
+    <input type="text" id="treatment" name="treatment" placeholder="例: エピペン使用"><br><br>
+
+    <button type="submit">送信</button>
+  </form>
+
+  <p id="responseMessage"></p>
+
+  <script>
+    document.getElementById('allergyForm').addEventListener('submit', async function(event) {
+      event.preventDefault(); // ページリロードを防止
+
+      const formData = {
+        name: document.getElementById('name').value,
+        allergy: document.getElementById('allergy').value,
+        severity: document.getElementById('severity').value,
+        treatment: document.getElementById('treatment').value,
+      };
+
+      // バックエンドにデータを送信
+      const response = await fetch('http://localhost:5000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+      document.getElementById('responseMessage').textContent = result.message;
+    });
+  </script>
+</body>
+</html>
