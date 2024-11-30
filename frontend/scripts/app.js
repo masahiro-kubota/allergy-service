@@ -10,8 +10,8 @@ document.getElementById('allergyForm').addEventListener('submit', async function
 
   try {
     // バックエンドにデータを送信
-    //base_url = 'http://localhost:8000'
     base_url = 'https://allergy-service-hswx.onrender.c
+    //base_url = 'http://localhost:8000'
     const response = await fetch(`${base_url}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
