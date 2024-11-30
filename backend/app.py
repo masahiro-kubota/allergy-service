@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from flask.json import JSONEncoder
 import uuid
@@ -33,8 +33,10 @@ def register_allergy():
 def get_allergy_info(unique_id):
     data = database.get(unique_id)
     if not data:
-        return jsonify({"message": "アレルギー情報が見つかりません"}), 404
-    return jsonify(data), 200
+        return render_template('error.html', message="アレルギー情報が見つかりません"), 404
+        #return jsonify({"message": "アレルギー情報が見つかりません"}), 404
+    #return jsonify(data), 200
+    return render_template('info.html', data=data)
 
 @app.route('/info', methods=['GET'])
 def get_all_allergies():
