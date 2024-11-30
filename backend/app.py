@@ -1,9 +1,11 @@
 #! /usr/bin/env python
 
 from json import JSONEncoder
+import os
 import sqlite3
 import uuid
 
+from dotenv import load_dotenv
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
@@ -38,6 +40,8 @@ def create_app():
     CORS(app)
     init_db("data/allergies.db")
 
+    base_url = os.getenv("NEXT_PUBLIC_BASE_URL", "http://localhost:8000")
+
     @app.route('/register', methods=['POST'])
     def register_allergy():
         data = request.json
@@ -52,7 +56,7 @@ def create_app():
                 VALUES (?, ?, ?, ?, ?)
             ''', (unique_id, data.get('name'), data.get('allergy'), data.get('severity'), data.get('treatment')))
             conn.commit()
-        share_link = f"https://allergy-service-hswx.onrender.com/share/{unique_id}"
+        share_link = f"{base_url}/share/{unique_id}"
 
         return jsonify({
             "message": "アレルギー情報が登録されました",
@@ -93,5 +97,7 @@ def create_app():
     
     return app
 
+
+load_dotenv()
 # アプリケーションインスタンスを生成
-app = create_app()  # DEBUGモードを無効化
+app = create_app()
