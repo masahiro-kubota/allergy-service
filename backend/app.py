@@ -2,7 +2,7 @@
 
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-from flask.json import JSONEncoder
+from json import JSONEncoder
 import uuid
 
 class CustomJSONEcoder(JSONEncoder):
@@ -24,7 +24,7 @@ def register_allergy():
         return jsonify({"message": "アレルギー対象と重症度は必須です"}), 400
     unique_id = str(uuid.uuid4())
     database[unique_id] = data  # データをメモリに保存
-    share_link = f"http://localhost:5000/share/{unique_id}"
+    share_link = f"http://localhost:8000/share/{unique_id}"
 
     return jsonify({
         "message": "アレルギー情報が登録されました",
