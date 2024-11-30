@@ -7,7 +7,7 @@ import uuid
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
-
+# TODO ファイルの分割
 class CustomJSONEcoder(JSONEncoder):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -52,7 +52,7 @@ def create_app():
                 VALUES (?, ?, ?, ?, ?)
             ''', (unique_id, data.get('name'), data.get('allergy'), data.get('severity'), data.get('treatment')))
             conn.commit()
-        share_link = f"http://localhost:8000/share/{unique_id}"
+        share_link = f"http://https://allergy-service-hswx.onrender.com/share/{unique_id}"
 
         return jsonify({
             "message": "アレルギー情報が登録されました",
