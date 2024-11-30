@@ -52,7 +52,7 @@ def create_app():
                 VALUES (?, ?, ?, ?, ?)
             ''', (unique_id, data.get('name'), data.get('allergy'), data.get('severity'), data.get('treatment')))
             conn.commit()
-        share_link = f"http://https://allergy-service-hswx.onrender.com/share/{unique_id}"
+        share_link = f"https://allergy-service-hswx.onrender.com/share/{unique_id}"
 
         return jsonify({
             "message": "アレルギー情報が登録されました",
