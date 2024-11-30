@@ -87,12 +87,31 @@ def create_app():
     def get_all_allergies():
         with sqlite3.connect("data/allergies.db") as conn:
             cursor = conn.cursor()
+            # クエリを実行してデータを取得
+            cursor.execute('SELECT id, name, allergy, severity, treatment FROM allergies')
             rows = cursor.fetchall()
         data = [
             {"id": row[0], "name": row[1], "allergy": row[2], "severity": row[3], "treatment": row[4]}
             for row in rows
         ]
         return jsonify(data), 200
+    
+    @app.route('/table', methods=['GET'])
+    def show_table():
+        # データベースからデータを取得
+        with sqlite3.connect("data/allergies.db") as conn:
+            cursor = conn.cursor()
+            cursor.execute('SELECT id, name, allergy, severity, treatment FROM allergies')
+            rows = cursor.fetchall()
+        
+        # データを辞書形式に変換
+        data = [
+            {"id": row[0], "name": row[1], "allergy": row[2], "severity": row[3], "treatment": row[4]}
+            for row in rows
+        ]
+
+        # テーブルを表示するHTMLをレンダリング
+        return render_template('table.html', data=data)
     
     return app
 
