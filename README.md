@@ -4,5 +4,7 @@ allergy service
 $ xdg-open frontend/index.html
 ```
 ```
-$ ./backend/app.py
+$ uv sync
+$ . .venv/bin/activate
+$ gunicorn backend.app:app
 ```
