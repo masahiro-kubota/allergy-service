@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask.json import JSONEncoder
-import json
+import uuid
 
 class CustomJSONEcoder(JSONEncoder):
     def __init__(self, *args, **kwargs):
@@ -13,16 +13,28 @@ app.json_encoder = CustomJSONEcoder
 CORS(app)
 
 # メモリ内データベース（簡易版）
-database = []
+database = {}
 
 @app.route('/register', methods=['POST'])
 def register_allergy():
     data = request.json
     if not data.get('allergy') or not data.get('severity'):
         return jsonify({"message": "アレルギー対象と重症度は必須です"}), 400
+    unique_id = str(uuid.uuid4())
+    database[unique_id] = data  # データをメモリに保存
+    share_link = f"http://localhost:5000/share/{unique_id}"
 
-    database.append(data)  # データをメモリに保存
-    return jsonify({"message": "アレルギー情報が登録されました"}), 201
+    return jsonify({
+        "message": "アレルギー情報が登録されました",
+        "link": share_link
+        }), 201
+
+@app.route('/share/<string:unique_id>', methods=['GET'])
+def get_allergy_info(unique_id):
+    data = database.get(unique_id)
+    if not data:
+        return jsonify({"message": "アレルギー情報が見つかりません"}), 404
+    return jsonify(data), 200
 
 @app.route('/info', methods=['GET'])
 def get_all_allergies():

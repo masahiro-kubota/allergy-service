@@ -28,6 +28,7 @@
   </form>
 
   <p id="responseMessage"></p>
+  <p id="shareLink"></p>
 
   <script>
     document.getElementById('allergyForm').addEventListener('submit', async function(event) {
@@ -39,16 +40,28 @@
         severity: document.getElementById('severity').value,
         treatment: document.getElementById('treatment').value,
       };
+      try{
+        // バックエンドにデータを送信
+        const response = await fetch('http://localhost:5000/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
 
-      // バックエンドにデータを送信
-      const response = await fetch('http://localhost:5000/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+        const result = await response.json();
+        if (response.ok){
+          document.getElementById('responseMessage').textContent = result.message;
+          // TODO innerHTMLは安全性に問題あり
+          document.getElementById('shareLink').innerHTML = `<a href="${result.link}" target="_blank">共有リンク: ${result.link}</a>`;
+        } else {
+          document.getElementById('responseMessage').textContent = result.message;
+        }
+        
+        } catch (error){
+        console.error('エラーが発生しました');
+      }
 
-      const result = await response.json();
-      document.getElementById('responseMessage').textContent = result.message;
+      
     });
   </script>
 </body>
